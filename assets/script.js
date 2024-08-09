@@ -5,6 +5,22 @@ let buttonElement = document.querySelector("#app button");
 
 let tarefas = [];
 
+
+function renderTarefas(){
+    listElement.innerHTML = "";
+
+    tarefas.map((todo)=>{
+        let liElement = document.createElement("li");
+        let tarefaText = document.createTextNode(todo);
+
+        liElement.appendChild(tarefaText);
+        listElement.appendChild(liElement);
+
+
+        
+    })
+}
+
 function adicionarTarefas(){
     if(inputElement.value === ''){
         alert("Digitar alguma tarefa");
@@ -14,6 +30,8 @@ function adicionarTarefas(){
 
         tarefas.push(novaTarefa);
         inputElement.value = '';
+
+        renderTarefas();
 
     }
 }
