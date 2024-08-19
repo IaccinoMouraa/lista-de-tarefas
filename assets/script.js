@@ -1,64 +1,46 @@
+// URL: https://sujeitoprogramador.com/rn-api/?api=posts
 
-let listElement = document.querySelector("#app ul");
-let inputElement = document.querySelector("#app input");
-let buttonElement = document.querySelector("#app button");
+let listElement = document.querySelector("#app");
 
-let tarefas = JSON.parse(localStorage.getItem("@listaTarefas")) || [];
+let posts = [];
 
 
-function renderTarefas(){
-    listElement.innerHTML = "";
+function nutriApp(){
 
-    tarefas.map((todo)=>{
+    fetch("https://sujeitoprogramador.com/rn-api/?api=posts")
+    .then((r) => r.json())
+    .then((json) => {
+      posts = json;
+
+    posts.map((item)=>{
         let liElement = document.createElement("li");
-        let tarefaText = document.createTextNode(todo);
+        let titleElement = document.createElement("strong");
+        let imgElement = document.createElement("img");
+        let descriptionElement = document.createElement("a");
 
-        let linkElement = document.createElement("a");
-        linkElement.setAttribute("href", "#");
+        let titleText = document.createTextNode(item.titulo);
+        titleElement.appendChild(titleText);
+        liElement.appendChild(titleElement);
 
-        let linkText = document.createTextNode("Excluir");
-        linkElement.appendChild(linkText);
+        imgElement.src = item.capa;
+        liElement.appendChild(imgElement);
 
-        let posicao = tarefas.indexOf(todo);
+        let descriptionText = document.createTextNode(item.subtitulo);
+        descriptionElement.appendChild(descriptionText);
+        liElement.appendChild(descriptionElement);
 
-        linkElement.setAttribute("onclick", `deletarTarefa(${posicao})`)
-
-        liElement.appendChild(tarefaText);
-        liElement.appendChild(linkElement);
         listElement.appendChild(liElement);
 
 
-        
+
     })
+
+    })
+    .catch(()=>{
+        console.log("DEU ALGUM ERRO")
+    })
+
+
 }
 
-renderTarefas();
-
-function adicionarTarefas(){
-    if(inputElement.value === ''){
-        alert("Digitar alguma tarefa");
-        return false;
-    }else{
-        let novaTarefa = inputElement.value;
-
-        tarefas.push(novaTarefa);
-        inputElement.value = '';
-
-        renderTarefas();
-        salvarDados();
-
-
-    }
-}
-
-buttonElement.onclick = adicionarTarefas;
-
-function deletarTarefa(posicao){
-    tarefas.splice(posicao, 1);
-    renderTarefas();
-    salvarDados();
-}
-
-function salvarDados(){
-    localStorage.setItem("@listaTarefas", JSON.stringify(tarefas) )
-}
+nutriApp();
